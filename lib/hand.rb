@@ -27,19 +27,26 @@ class Hand
     #to check for specific combinations and returns a symbol representing the hand strength.
   
     def beats?(other_hand)
-      my_strength = hand_strength
-      other_strength = other_hand.hand_strength
-  
-      if my_strength == other_strength
-        @cards.map(&:value).max > other_hand.cards.map(&:value).max
-      else
-        HAND_STRENGTHS.index(my_strength) > HAND_STRENGTHS.index(other_strength)
+        my_strength = hand_strength
+        other_strength = other_hand.hand_strength
+      
+        if my_strength == other_strength
+          my_sorted_values = @cards.map(&:value).sort.reverse
+          other_sorted_values = other_hand.cards.map(&:value).sort.reverse
+          
+          my_sorted_values.each_with_index do |value, index|
+            return true if value != other_sorted_values[index]
+          end
+          # If all card values are equal, it's a tie, so return false
+          false
+        else
+          HAND_STRENGTHS.index(my_strength) > HAND_STRENGTHS.index(other_strength)
+        end
       end
-    end
-  # The beats? method compares the strength of the current hand with another hand (other_hand). 
-  #It first determines the strengths of both hands using hand_strength and then compares them.
-  #If the strengths are equal, it compares the highest card value to determine the winner.
-  #If the strengths are different, it compares their positions in the HAND_STRENGTHS array to determine the winner.
+      # I had to update this method. It now iterates through the card values and compares each pair.
+      # If there is a difference, it returns true, if the current hands value is higher, it indicates a win. It will 
+      # go through the comparisons until it cannot find a difference and the it will return false, which indicates the tie. It comapres
+      # the positions of the hand with Hand_ strengths to determine a winner. 
     private
   
     HAND_STRENGTHS = [:high_card, :pair, :two_pair, :three_of_a_kind, :straight, :flush, :full_house, :four_of_a_kind, :straight_flush, :royal_flush].freeze
