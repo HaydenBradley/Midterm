@@ -18,20 +18,26 @@ class Player
       puts "Discarded #{positions_to_discard.length} card(s)."
     end
    # In the discard method, the player is prompted to choose cards to discard, and those cards are removed from the hand if specified by the player.
-    def decide_action(current_bet)
-      puts "Enter what you want to do: fold, see (to match the current bet), or raise followed by the amount ex: (raise 10):"
-      action = gets.chomp.downcase.split
-  ## Prompts the player to decide their action (fold, see, or raise) in the game.
-      case action[0]
-      when 'fold' then return :fold
-      when 'see' then return :see if @pot >= current_bet
-      when 'raise'
-        raise_amount = action[1].to_i
-        return :raise, raise_amount if raise_amount.positive? && @pot >= current_bet + raise_amount
-      end
-  #case method to break down the response of the player
-      puts "Invalid or not enough money"
-      decide_action(current_bet)
-    end
+   def decide_action_prompt
+    "Enter what you want to do: fold, see (to match the current bet), or raise followed by the amount ex: (raise 10):"
   end
+  
+  def decide_action(current_bet)
+  loop do
+    puts decide_action_prompt
+    action = gets.chomp.downcase.split
+    case action[0]
+    when 'fold' then return :fold
+    when 'see' then return :see if @pot >= current_bet
+    when 'raise'
+      raise_amount = action[1].to_i
+      return :raise, raise_amount if raise_amount.positive? && @pot >= current_bet + raise_amount
+    end
+    puts "Invalid or not enough money"
+  end
+end
+
+  
+  
+    end
   
