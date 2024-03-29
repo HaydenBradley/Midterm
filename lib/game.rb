@@ -1,4 +1,6 @@
+require_relative 'deck'
 class Game
+    attr_reader :deck, :players, :pot, :current_player_index
     def initialize
       @deck = Deck.new
       @players = []
